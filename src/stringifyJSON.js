@@ -7,17 +7,37 @@ var stringifyJSON = function(obj) {
   // if null
   //    return 'null'
 
+  if (obj === null) {
+    return 'null';
+  }
+
   // if undefined OR function (typeof input === 'function')
   //    return undefined;
+
+  if (obj === undefined || typeof obj === 'function') {
+    return undefined;
+  }
 
   // if number
   //    return number.toString();
 
+  if (typeof obj === 'number') {
+    return obj.toString();
+  }
+
   // if string
   //    return string
 
+  if (typeof obj === 'string') {
+    return '"' + obj + '"';
+  }
+
   // if boolean
   //    return " + boolean + "
+
+  if (typeof obj === 'boolean') {
+    return obj.toString();
+  }
 
   // if array
   // var ouput = '[';
@@ -26,13 +46,33 @@ var stringifyJSON = function(obj) {
   // output += "]"
   // return output
 
-  // if object
-  //  var output = '{'
-  //    for (key in object)..
-  //      output += 'key:' + stringifyJSON(object[key]) + ','
-  // return output + '}'
+  if (Array.isArray(obj)) {
+    if (obj.length === 0) { return '[]'; }
+    //var output = "[";
+    var output = obj.reduce(function(acc, cur) {
+      return acc + stringifyJSON(cur) + ',';
+    }, '[');
+    // [1,2,
+    output = output.slice(0, -1);
+    return output + ']';
+  }
+
+  if (typeof obj === 'object') {
+    var output = '{';
+    for (key in obj) {
+      if (!(obj[key] === undefined) && !(typeof obj[key] === 'function')) {
+        output += stringifyJSON(key) + ':' + stringifyJSON(obj[key]) + ',';
+      }
+    }
+
+    if (output !== '{') {
+      output = output.slice(0, -1);
+    }
+    return output + '}';
+  }
 
 };
+
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof#Description
 
@@ -45,3 +85,14 @@ var stringifyJSON = function(obj) {
 // Host object (provided by the JS environment)	Implementation-dependent
 // Function object (implements [[Call]] in ECMA-262 terms)	"function"
 // Any other object	"object"
+
+// Pomander errors
+// 11:12  warning  Strings must use singlequote   quotes
+// 50:36  warning  Strings must use singlequote   quotes
+// 54:8   warning  Strings must use singlequote   quotes
+// 56:28  warning  A space is required after ','  comma-spacing
+// 57:21  warning  Strings must use singlequote   quotes
+// 61:21  error    Missing semicolon              semi
+// 68:20  warning  Strings must use singlequote   quotes
+// 69:30  warning  A space is required after ','  comma-spacing
+// 71:21  warning  Strings must use singlequote   quotes
