@@ -16,11 +16,11 @@ describe('getElementsByClassName', function() {
       var $rootElement = $(htmlString);
       $('body').append($rootElement);
 
-      var result = getElementsByClassName('targetClassName');
-      var expectedNodeList = document.getElementsByClassName('targetClassName');
-      var expectedArray = Array.prototype.slice.apply(expectedNodeList);
-      var equality = _.isEqual(result, expectedArray); // why can't we use `===` here?
-      expect(equality).to.equal(FILL_ME_IN);
+      var result = getElementsByClassName('targetClassName'); // using our fucntion to search for targetClassName
+      var expectedNodeList = document.getElementsByClassName('targetClassName'); // this is the real function
+      var expectedArray = Array.prototype.slice.apply(expectedNodeList); // this is converting the DOM grouping into an array
+      var equality = _.isEqual(result, expectedArray); // why can't we use `===` here? this is doing deep equality check
+      expect(equality).to.equal(true);
 
       $rootElement.remove();
     });
